@@ -1,0 +1,37 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": [
+        "s3:GetObject",
+        "s3:PutObject",
+        "s3:DeleteObject",
+        "s3:AbortMultipartUpload"
+       ],
+      "Resource": "*"
+    },
+    {
+      "Effect": "Allow",
+      "Action": "elasticmapreduce:*",
+      "Resource": "*"
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+        "logs:CreateLogDelivery",
+        "logs:CreateLogGroup",
+        "logs:CreateLogStream",
+        "logs:DeleteLogDelivery",
+        "logs:Describe*",
+        "logs:GetLogDelivery",
+        "logs:GetLogEvents",
+        "logs:ListLogDeliveries",
+        "logs:PutLogEvents",
+        "logs:PutResourcePolicy",
+        "logs:UpdateLogDelivery"
+      ],
+      "Resource": "*"
+    }
+  ]
+}
