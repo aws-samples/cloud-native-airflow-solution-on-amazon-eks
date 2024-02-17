@@ -57,11 +57,11 @@ EOF
 
 kubectl create secret generic airflow-db \
    -n airflow \
-   --from-literal=connection=postgresql://postgres:<YOUR_DATABASE_PASSWORD>@${DB_ENDPOINT}:5432/postgres
+   --from-literal=connection=postgresql://postgres:<DATABASE_PASSWORD>@${DB_ENDPOINT}:5432/postgres
 
 kubectl create secret generic airflow-result-db \
    -n airflow \
-   --from-literal=connection=db+postgresql://postgres:<YOUR_DATABASE_PASSWORD>@${DB_ENDPOINT}:5432/postgres
+   --from-literal=connection=db+postgresql://postgres:<DATABASE_PASSWORD>@${DB_ENDPOINT}:5432/postgres
 
 kubectl create secret generic git-credentials \
   -n airflow \
@@ -80,7 +80,7 @@ helm install keda kedacore/keda --version 2.13.1 -n keda --create-namespace
 
 cat resources/values.yaml | envsubst \
   | helm upgrade --install airflow apache-airflow/airflow \
-    --version "2.8.0" \
+    --version "8.8.0" \
     --set workers.keda.enabled=true \
     --namespace airflow -f -
 

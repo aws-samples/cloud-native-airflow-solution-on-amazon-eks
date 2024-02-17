@@ -6,7 +6,7 @@
 
 aws iam create-policy \
     --policy-name AWSLoadBalancerControllerIAMPolicy-${CLUSTER_NAME} \
-    --policy-document file://resources/iam-policy.json
+    --policy-document file://resources/iam_policy.json
 
 AWS_ACCOUNT_ID="$(aws sts get-caller-identity --query Account --output text)"
 

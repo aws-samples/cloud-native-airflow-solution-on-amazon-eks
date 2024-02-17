@@ -67,7 +67,7 @@ eksctl create addon --name aws-ebs-csi-driver --cluster ${CLUSTER_NAME} \
 
 aws iam create-policy \
     --policy-name AmazonEKS_EFS_CSI_Driver_Policy \
-    --policy-document file://resources/efs-iam-policy-example.json
+    --policy-document file://resources/efs-iam-policy.json
 
 eksctl create iamserviceaccount \
     --cluster ${CLUSTER_NAME} \
@@ -133,7 +133,7 @@ db_endpoint=$(aws rds create-db-cluster --region $AWS_REGION \
   --engine aurora-postgresql \
   --engine-version 15.4 \
   --master-username postgres \
-  --master-user-password <YOUR_DATABASE_PASSWORD> \
+  --master-user-password <DATABASE_PASSWORD> \
   --storage-encrypted \
   --vpc-security-group-ids $db_security_group_id \
   --query 'DBCluster.Endpoint' --output text)
@@ -177,7 +177,7 @@ aws elasticache create-replication-group \
     --replication-group-description "${CLUSTER_NAME} group" \
     --region $AWS_REGION \
     --engine redis \
-    --engine-version 7 \
+    --engine-version 7.0 \
     --cache-node-type cache.r6g.large \
     --multi-az-enabled \
     --replicas-per-node-group 1 \
