@@ -3,8 +3,8 @@
 #### Script Variables ########
 
 CLUSTER_NAME=airflow
-AWS_REGION=us-west-2
-NODEGROUP_NAME=ng-airflow
+AWS_REGION=cn-north-1
+NODEGROUP_NAME=ng-arm64-airflow
 VPC_CIDR="10.1.0.0/16"
 
 
@@ -17,7 +17,7 @@ DB_PRIVATE_CIDR2="$(echo $VPC_CIDR | cut -d"." -f1-2).202.0/24"
 
 eksctl create cluster --name ${CLUSTER_NAME} \
   --region ${AWS_REGION}  --with-oidc \
-  --version 1.28 --node-type m6g.xlarge \
+  --version 1.23 --node-type m6g.xlarge \
   --alb-ingress-access --node-private-networking \
   --nodegroup-name ${NODEGROUP_NAME} --vpc-cidr ${VPC_CIDR} \
   --vpc-nat-mode HighlyAvailable
@@ -56,12 +56,12 @@ NODE_ROLE_ARN=$(aws eks describe-nodegroup --cluster-name ${CLUSTER_NAME} --regi
 NODE_ROLE_NAME=$(echo $NODE_ROLE_ARN | sed -e 's/\//\n/g' | sed -e '2q;d')
 
 aws iam attach-role-policy --role-name $NODE_ROLE_NAME \
-  --policy-arn arn:aws:iam::aws:policy/CloudWatchAgentServerPolicy
+  --policy-arn arn:aws-cn:iam::aws:policy/CloudWatchAgentServerPolicy
 
 ## ebs add-on aws-ebs-csi-driver
 
 eksctl create addon --name aws-ebs-csi-driver --cluster ${CLUSTER_NAME} \
-  --service-account-role-arn arn:aws:iam::${AWS_ACCOUNT_ID}:role/AmazonEKS_EBS_CSI_DriverRole --force
+  --service-account-role-arn arn:aws-cn:iam::${AWS_ACCOUNT_ID}:role/AmazonEKS_EBS_CSI_DriverRole --force
 
 ## apply EFS CSI driver
 
@@ -73,16 +73,12 @@ eksctl create iamserviceaccount \
     --cluster ${CLUSTER_NAME} \
     --namespace kube-system \
     --name efs-csi-controller-sa \
-    --attach-policy-arn arn:aws:iam::${AWS_ACCOUNT_ID}:policy/AmazonEKS_EFS_CSI_Driver_Policy \
+    --attach-policy-arn arn:aws-cn:iam::${AWS_ACCOUNT_ID}:policy/AmazonEKS_EFS_CSI_Driver_Policy \
     --approve \
     --region ${AWS_REGION}
 
-helm repo add aws-efs-csi-driver https://kubernetes-sigs.github.io/aws-efs-csi-driver/
-helm repo update aws-efs-csi-driver
+kubectl apply -f resources/efs-csi-driver.yaml
 
-helm upgrade --install aws-efs-csi-driver --namespace kube-system aws-efs-csi-driver/aws-efs-csi-driver \
-  --set controller.serviceAccount.create=false \
-  --set controller.serviceAccount.name=efs-csi-controller-sa
 
 security_group_id=$(aws ec2 create-security-group \
     --group-name ${CLUSTER_NAME}EfsSecurityGroup \
@@ -131,7 +127,7 @@ db_endpoint=$(aws rds create-db-cluster --region $AWS_REGION \
   --db-cluster-identifier ${CLUSTER_NAME}-db-cluster \
   --db-subnet-group-name ${CLUSTER_NAME}-db-subnet-group \
   --engine aurora-postgresql \
-  --engine-version 15.4 \
+  --engine-version 14.3 \
   --master-username postgres \
   --master-user-password <YOUR_DATABASE_PASSWORD> \
   --storage-encrypted \
@@ -177,7 +173,7 @@ aws elasticache create-replication-group \
     --replication-group-description "${CLUSTER_NAME} group" \
     --region $AWS_REGION \
     --engine redis \
-    --engine-version 7 \
+    --engine-version 6.2 \
     --cache-node-type cache.r6g.large \
     --multi-az-enabled \
     --replicas-per-node-group 1 \
