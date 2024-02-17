@@ -14,4 +14,4 @@ AWS_ACCOUNT_ID="$(aws sts get-caller-identity --query Account --output text)"
 sleep 30
 aws iam delete-policy \
     --region $AWS_REGION \
-    --policy-arn arn:aws:iam::${AWS_ACCOUNT_ID}:policy/AWSLoadBalancerControllerIAMPolicy-${CLUSTER_NAME}
+    --policy-arn arn:aws-cn:iam::${AWS_ACCOUNT_ID}:policy/AWSLoadBalancerControllerIAMPolicy-${CLUSTER_NAME}

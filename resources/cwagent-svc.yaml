@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: cloud-agent-statsd
+  namespace: amazon-cloudwatch
+spec:
+  internalTrafficPolicy: Cluster
+  ports:
+  - name: statsd-ingest
+    port: 8125
+    protocol: UDP
+    targetPort: 8125
+  selector:
+    name: cloudwatch-agent
+  type: ClusterIP

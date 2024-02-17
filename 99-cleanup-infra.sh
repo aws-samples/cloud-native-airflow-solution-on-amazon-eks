@@ -1,6 +1,8 @@
 #! /bin/bash
 
-. ./99-set-env.sh
+#### Script Variables ########
+. 99-set-env.sh
+##############################
 
 aws efs delete-access-point --access-point-id $(aws efs describe-access-points --file-system-id $EFS_FILESYSTEM_ID --region $AWS_REGION --query 'AccessPoints[0].AccessPointId' --output text) --region $AWS_REGION
 for mount_target in $(aws efs describe-mount-targets \
@@ -28,7 +30,7 @@ aws efs delete-file-system --file-system-id $EFS_FILESYSTEM_ID --region $AWS_REG
 
 aws rds delete-db-subnet-group --db-subnet-group-name ${CLUSTER_NAME}-db-subnet-group --region $AWS_REGION
 aws elasticache delete-cache-subnet-group --cache-subnet-group-name "${CLUSTER_NAME}-redis-subnet-group" --region $AWS_REGION
-aws iam detach-role-policy --role-name $NODE_ROLE_NAME --region $AWS_REGION --policy-arn arn:aws:iam::aws:policy/CloudWatchAgentServerPolicy
+aws iam detach-role-policy --role-name $NODE_ROLE_NAME --region $AWS_REGION --policy-arn arn:aws-cn:iam::aws:policy/CloudWatchAgentServerPolicy
 
 eksctl delete cluster --name=$CLUSTER_NAME --region $AWS_REGION
 
