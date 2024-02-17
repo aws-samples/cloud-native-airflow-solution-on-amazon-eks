@@ -54,9 +54,9 @@ The architecture details:
 
 First, preparing ARM-based Docker images. You can start a Graviton2 EC2 instance as a bastion host. This instance has two functions, building your ARM images and deploying the following scripts. We have prepared the docker image's built scripts in the docker path. 
   
-• Airflow, version 2.3.4  
-• KEDA, version 2.0.0  
-• PgBouncer, version 1.14.0  
+• Airflow Chart Version - 8.8.0
+• KEDA, version 2.13.1  
+• PgBouncer, airflow-pgbouncer-2024.01.19-1.21.0
 
 For the Git-Sync, we donot prepare this, you can use the official Arm-Based image.If you are using MacOX, you can use the following command to check the image 
 ```
@@ -83,7 +83,7 @@ We have prepared 6 bash scripts to deploy the Airflow environment:
 • 02-setup-karpenter.sh, deploy Karpenter on Amazon EKS, and dynamically expand new EC2 resources through Karpenter  
 • 03-setup-cloudwatch.sh, deploy Amazon CloudWatch related resources, Airflow logs to CloudWatch, and metrics to Container Insight  
 • 04-setup-alb-ingress.sh, which deploys an Amazon Application Load Balancer as an Apache Airflow web ingress  
-• 05-setup-airflow.sh, deploy Apache Airflow on Amazon EKS  
+• 05-setup-airflow.sh, deploy Keda & Apache Airflow on Amazon EKS  
 
 Please follow the follwing steps to set up Airflow Cluster.
 
