@@ -47,5 +47,5 @@ eksctl delete iamserviceaccount \
     --namespace airflow \
     --name airflow-triggerer
 sleep 30
-aws iam delete-policy --policy-arn arn:aws-cn:iam::${AWS_ACCOUNT_ID}:policy/AirflowConnectionPolicy-${CLUSTER_NAME} \
+aws iam delete-policy --policy-arn arn:aws:iam::${AWS_ACCOUNT_ID}:policy/AirflowConnectionPolicy-${CLUSTER_NAME} \
   --region $AWS_REGION

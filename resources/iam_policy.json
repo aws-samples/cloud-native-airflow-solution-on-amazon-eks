@@ -85,7 +85,7 @@
             "Action": [
                 "ec2:CreateTags"
             ],
-            "Resource": "arn:aws-cn:ec2:*:*:security-group/*",
+            "Resource": "arn:aws:ec2:*:*:security-group/*",
             "Condition": {
                 "StringEquals": {
                     "ec2:CreateAction": "CreateSecurityGroup"
@@ -101,7 +101,7 @@
                 "ec2:CreateTags",
                 "ec2:DeleteTags"
             ],
-            "Resource": "arn:aws-cn:ec2:*:*:security-group/*",
+            "Resource": "arn:aws:ec2:*:*:security-group/*",
             "Condition": {
                 "Null": {
                     "aws:RequestTag/elbv2.k8s.aws/cluster": "true",
@@ -153,9 +153,9 @@
                 "elasticloadbalancing:RemoveTags"
             ],
             "Resource": [
-                "arn:aws-cn:elasticloadbalancing:*:*:targetgroup/*/*",
-                "arn:aws-cn:elasticloadbalancing:*:*:loadbalancer/net/*/*",
-                "arn:aws-cn:elasticloadbalancing:*:*:loadbalancer/app/*/*"
+                "arn:aws:elasticloadbalancing:*:*:targetgroup/*/*",
+                "arn:aws:elasticloadbalancing:*:*:loadbalancer/net/*/*",
+                "arn:aws:elasticloadbalancing:*:*:loadbalancer/app/*/*"
             ],
             "Condition": {
                 "Null": {
@@ -171,10 +171,10 @@
                 "elasticloadbalancing:RemoveTags"
             ],
             "Resource": [
-                "arn:aws-cn:elasticloadbalancing:*:*:listener/net/*/*/*",
-                "arn:aws-cn:elasticloadbalancing:*:*:listener/app/*/*/*",
-                "arn:aws-cn:elasticloadbalancing:*:*:listener-rule/net/*/*/*",
-                "arn:aws-cn:elasticloadbalancing:*:*:listener-rule/app/*/*/*"
+                "arn:aws:elasticloadbalancing:*:*:listener/net/*/*/*",
+                "arn:aws:elasticloadbalancing:*:*:listener/app/*/*/*",
+                "arn:aws:elasticloadbalancing:*:*:listener-rule/net/*/*/*",
+                "arn:aws:elasticloadbalancing:*:*:listener-rule/app/*/*/*"
             ]
         },
         {
@@ -199,10 +199,32 @@
         {
             "Effect": "Allow",
             "Action": [
+                "elasticloadbalancing:AddTags"
+            ],
+            "Resource": [
+                "arn:aws:elasticloadbalancing:*:*:targetgroup/*/*",
+                "arn:aws:elasticloadbalancing:*:*:loadbalancer/net/*/*",
+                "arn:aws:elasticloadbalancing:*:*:loadbalancer/app/*/*"
+            ],
+            "Condition": {
+                "StringEquals": {
+                    "elasticloadbalancing:CreateAction": [
+                        "CreateTargetGroup",
+                        "CreateLoadBalancer"
+                    ]
+                },
+                "Null": {
+                    "aws:RequestTag/elbv2.k8s.aws/cluster": "false"
+                }
+            }
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
                 "elasticloadbalancing:RegisterTargets",
                 "elasticloadbalancing:DeregisterTargets"
             ],
-            "Resource": "arn:aws-cn:elasticloadbalancing:*:*:targetgroup/*/*"
+            "Resource": "arn:aws:elasticloadbalancing:*:*:targetgroup/*/*"
         },
         {
             "Effect": "Allow",
