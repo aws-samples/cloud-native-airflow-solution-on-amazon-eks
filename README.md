@@ -148,5 +148,4 @@ After the above deployment, you can see the Airflow's components.
 
 
 ## Limitations
-1. The solution now supports Beijing Region 
 2. The Airflow Cluster is created in the new VPC
